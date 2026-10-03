@@ -1,0 +1,9 @@
+cff-version: 1.2.0
+message: "If you use this code or data, please cite it as below."
+title: "Is Statewide Climate Sensitivity of Winter Wheat an Artefact of Aggregation? Opposing East–West Precipitation Responses in Kansas (1982–2023)"
+authors:
+  - family-names: "Singh"
+    given-names: "Gurjant"
+date-released: 2026-09-28
+license: MIT
+repository-code: "https://github.com/gurjant088/[repo-name]"
