@@ -1,10 +1,17 @@
-# Is Statewide Climate Sensitivity of Winter Wheat an Artefact of Aggregation?
+# Kansas winter wheat and climate (1982–2023)
 
-**Opposing East–West Precipitation Responses in Kansas (1982–2023)**
+**County-level analysis: statewide vs zone-specific models, agro-climatic zones and change through time**
 
-This repository contains the data, code and figures for a county-level study of how weather relates to Kansas winter wheat yields, and why statewide climate–yield models explain so little yield variability.
+This repository contains the data, code and figures for county-level studies of how weather relates to Kansas winter wheat yields. Scripts 01–03 examine why statewide climate–yield models explain so little yield variability; script 04 (v2.0) defines agro-climatic zones, compares zone-specific with statewide models (including out-of-time validation) and analyses changes in heat, freeze, drought and winterkill exposure between 1982–2002 and 2003–2023.
 
-## Key findings
+## Key findings (script 04: zones and change through time)
+
+- **Five agro-climatic zones** defined from climate alone (stability ARI = 0.74); 37 of 105 counties now have a climate resembling a warmer zone.
+- **Zone-specific models** did not significantly beat a statewide model in cross-validation (ridge ΔR² = +0.040, 95% CI −0.020 to 0.109; an east–west split did equally well), but the real zones beat random zones (permutation p = 0.003) and predicted 2003–2023 better when trained on 1982–2002 (ΔR² = +0.082, 95% CI 0.020 to 0.154).
+- **Skill is concentrated in the drier west** (within-zone R² up to 0.30) and absent in the humid east.
+- **Warming** of about 0.5 °C per decade (significant after FDR) and fewer winterkill years; heat-stress years rose from 10% to 17% of county-seasons (not significant), most in the hot south-west; no detectable shift in the yield–weather response. See `results/v4_zones/RESULTS_SUMMARY_v4.md`.
+
+## Key findings (scripts 01–03: statewide models and east–west contrast)
 
 - **Low predictive skill.** Under cross-validation with whole years held out, the best model (linear regression on county monthly weather anomalies) explained about 5% of yield variance (R² = 0.052). No weather variable was significant at the year level after false discovery rate (FDR) correction.
 - **County weather vs. one central point.** County-matched weather outperformed a single central point for every seasonal model, but the gain was not statistically significant (ΔR² = 0.085, 95% CI −0.015 to 0.184).
@@ -18,15 +25,19 @@ This repository contains the data, code and figures for a county-level study of 
 ├── code/
 │   ├── 01_monthly_analysis.py         # main analysis: county vs central point, monthly features
 │   ├── 02_daily_extremes_analysis.py  # extension: daily extreme-weather indices vs monthly
-│   └── 03_east_west_analysis.py       # exploratory east–west gradient (manuscript Table 3)
+│   ├── 03_east_west_analysis.py       # exploratory east–west gradient
+│   ├── 04_agroclimatic_zones_analysis.py  # zones, zone-specific vs statewide models, change through time, R² CIs
+│   └── 05_county_maps_and_shap.py     # county maps (m1–m4) and SHAP by zone (s1–s4); needs shap, geopandas
 ├── data/
 │   ├── raw/
 │   │   └── nass_kansas_winter_wheat_county_1981_2025.csv   # USDA NASS Quick Stats download
 │   └── weather/                       # NASA POWER caches (created automatically by the scripts)
 ├── figures/                           # figures as numbered in the manuscript (1–12)
-│   └── supplementary/                 # supplementary figures S1–S6
+│   ├── supplementary/                 # supplementary figures S1–S6
+│   └── v4_zones/                      # figures from scripts 04–05 (v01–v06, m1–m4, s1–s4)
 ├── results/                           # output tables (created by the scripts)
-│   └── RESULTS_SUMMARY.md             # key results reported in the manuscript
+│   ├── RESULTS_SUMMARY.md             # key results of scripts 01–03
+│   └── v4_zones/                      # script 04 results (summary + run output; CSVs written on run)
 ├── requirements.txt
 ├── CITATION.cff
 └── LICENSE
@@ -41,6 +52,9 @@ pip install -r requirements.txt
 python code/01_monthly_analysis.py         # ~5–10 min on first run (monthly weather download)
 python code/02_daily_extremes_analysis.py  # ~15–25 min on first run (daily weather download)
 python code/03_east_west_analysis.py       # seconds
+python code/04_agroclimatic_zones_analysis.py  # ~5–10 min once weather is cached; writes results/v4_zones/ and figures/v4_zones/
+pip install shap geopandas
+python code/05_county_maps_and_shap.py     # county maps and SHAP for the zones analysis
 ```
 
 Weather downloads are cached in `data/weather/`, so re-runs take only a few minutes and an interrupted download continues where it stopped. Tables are written to `results/` and figures to `results/run_figures/`; the curated, manuscript-numbered figures are in `figures/`. Small numerical differences can occur between library versions.
